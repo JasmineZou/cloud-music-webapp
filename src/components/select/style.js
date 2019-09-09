@@ -22,7 +22,7 @@ export const SelectContainer = styled.div`
     -o-transition: height .3s ease-in-out; /* Opera */
   }
   .scroll-up {
-    height: 281px;
+    height: 241px;
     transition: height .3s ease-in-out;
     -moz-transition: height .3s ease-in-out; /* Firefox 4 */
     -webkit-transition: height .3s ease-in-out; /* Safari and Chrome */
@@ -55,9 +55,16 @@ export const SelectContent = styled.div`
   }
   .list {
     position: relative;
-    height: 200px;
+    height: 210px;
     background: #fff;
-    padding: 20px 0;
+  }
+  .wrapper {
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    width: 100%;
   }
   i {
     position: absolute;
@@ -65,17 +72,16 @@ export const SelectContent = styled.div`
     left: 0;
     width: 100%;
     pointer-events: none;
+    height: 84px;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
   }
   .border-bottom-1px {
     top: 0;
-    height: 84px;
     background: -webkit-linear-gradient(bottom,hsla(0,0%,100%,.4),hsla(0,0%,100%,.8));
     background: linear-gradient(0deg,hsla(0,0%,100%,.4),hsla(0,0%,100%,.8));
   }
   .border-top-1px {
-    height: 116px;
     bottom: 0;
     background: -webkit-linear-gradient(top,hsla(0,0%,100%,.4),hsla(0,0%,100%,.8));
     background: linear-gradient(180deg,hsla(0,0%,100%,.4),hsla(0,0%,100%,.8));
@@ -83,13 +89,15 @@ export const SelectContent = styled.div`
   ul {
     position: absolute;
     width: 100%;
-    top: 0;
+    top: 84px;
+    margin-bottom: 74px;
     li {
       text-align: center;
       height: 42px;
       line-height: 42px;
     }
   }
+
 `;
 
 export const Mask = styled.div`
