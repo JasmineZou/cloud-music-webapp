@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import BScroll from "better-scroll";
 import { SelectContainer, Mask, Line, SelectContent } from './style';
 
+
+
 function Select(props) {
   const [isShowSelect, setIsShowSelect ] = useState(false);
   const [bScroll, setBScroll] = useState();
@@ -20,27 +22,37 @@ function Select(props) {
       bounce:{
         top: true,
         bottom: true
-      }
+      },
+      wheel: true,
+      rotate: 0,
+      selectedIndex: 0,
+      // wheel: {
+      //   selectedIndex: 0,
+      //   wheelWrapperClass: 'wheel-scroll',
+      //   wheelItemClass: 'wheel-item',
+      //   rotate: 0,
+      // },
     });
     setBScroll(scroll);
     return () => {
       setBScroll(null);
     }
+    // eslint-disable-next-line
   }, [list.length]);
-  const scrollEnd = (y) => {
-    const index = Math.floor(y / 42);
-    const li = document.querySelector(`.li-${index}`);
-    bScroll.scrollToElement(li, 1000)
-  }
+
   useEffect(() => {
     if(!bScroll) return;
     bScroll.on('touchEnd', (scroll) => {
-      scrollEnd(Math.abs(scroll.y));
+      console.log(list[bScroll.getSelectedIndex()]);
+      // const index = Math.floor(Math.abs(scroll.y) / 42);
+      // bScroll.wheelTo(index)
     })
     return () => {
       bScroll.off('scroll');
     }
-  }, [bScroll, scrollEnd]);
+  }, [bScroll, list]);
+
+
   return (
     <SelectContainer>
       <input onClick={() => setIsShowSelect(!isShowSelect)} />
@@ -59,9 +71,9 @@ function Select(props) {
               </div>
               <div className="list">
                 <div className="wrapper" ref={scrollContainerRef}>
-                  <ul>
+                  <ul className="wheel-scroll">
                     {list.length ? list.map((item, index) =>
-                    <li key={item.cat} className={`li-${index}`}>{item.name}</li>) :
+                    <li key={item.cat} className="wheel-item">{item.name}</li>) :
                     null}
                   </ul>
                 </div>
