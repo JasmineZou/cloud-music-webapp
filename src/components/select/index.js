@@ -44,6 +44,7 @@ function Select(props) {
     if(!bScroll) return;
     bScroll.on('touchEnd', (scroll) => {
       console.log(list[bScroll.getSelectedIndex()]);
+      alert(list[bScroll.getSelectedIndex()].name);
       // const index = Math.floor(Math.abs(scroll.y) / 42);
       // bScroll.wheelTo(index)
     })
