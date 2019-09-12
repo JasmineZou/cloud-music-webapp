@@ -5,28 +5,41 @@ import Loading from '../../components/loading';
 
 import * as actionTypes from './store/actionCreators';
 import Select from '../../components/select';
-import { SingersContainer } from './style';
+import { SingersContainer, SingersList } from './style';
 
 function Singers(props) {
   const { categoryList, singersList, enterLoading } = props;
   const { getCategoryDataDispatch, getSingersListDataDispatch } = props;
-  useEffect(() => {
-    if (!categoryList.size) {
-      getCategoryDataDispatch();
-    }
-    // if (!singersList.size) {
-    //   getSingersListDataDispatch();
-    // }
-    // eslint-disable-next-line
-  },[]);
   const categoryListJS = categoryList ? categoryList.toJS() : [];
   const singersListJS = singersList ? singersList.toJS() : [];
+  useEffect(() => {
+    if (!categoryListJS.length) {
+      getCategoryDataDispatch();
+    }
+    if (!singersListJS.length && categoryListJS.length) {
+      getSingersListDataDispatch(categoryListJS[0].cat);
+    }
+    // eslint-disable-next-line
+  },[categoryListJS, singersListJS]);
+  const onChange = (data) => {
+    getSingersListDataDispatch(data.cat);
+  }
+  console.log(singersListJS);
   return (
     <SingersContainer>
       <div className="top">
         <span className="cate">分类</span>
-        <Select list={categoryListJS}></Select>
+        <Select list={categoryListJS} onChange={onChange}></Select>
       </div>
+      <SingersList>
+        {singersListJS.length ? singersListJS.map(item =>
+          <li key={item.accountId}>
+            <img src={item.picUrl} alt='' />
+            <p>{item.name}</p>
+          </li>
+        ) : null}
+      </SingersList>
+
       {enterLoading ? <Loading/> : null}
     </SingersContainer>
   )
@@ -42,8 +55,8 @@ const mapDispatchToProps = (dispatch) => {
     getCategoryDataDispatch() {
       dispatch(actionTypes.getCategoryList());
     },
-    getSingersListDataDispatch() {
-      dispatch(actionTypes.getSingersList())
+    getSingersListDataDispatch(cat) {
+      dispatch(actionTypes.getSingersList(cat))
     }
   }
 }

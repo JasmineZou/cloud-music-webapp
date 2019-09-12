@@ -7,9 +7,10 @@ import { SelectContainer, Mask, Line, SelectContent } from './style';
 
 function Select(props) {
   const [isShowSelect, setIsShowSelect ] = useState(false);
+  const [selected, setSelected ] = useState({name: '', cate: ''});
   const [bScroll, setBScroll] = useState();
   const scrollContainerRef = useRef();
-  const { list } = props;
+  const { list, onChange } = props;
   const { confirmText, cancelText, maskClose } = props;
   useEffect(() => {
     if (!list.length) {
@@ -26,49 +27,33 @@ function Select(props) {
       wheel: true,
       rotate: 0,
       selectedIndex: 0,
-      // wheel: {
-      //   selectedIndex: 0,
-      //   wheelWrapperClass: 'wheel-scroll',
-      //   wheelItemClass: 'wheel-item',
-      //   rotate: 0,
-      // },
     });
     setBScroll(scroll);
+    setSelected(list[0]);
     return () => {
       setBScroll(null);
     }
     // eslint-disable-next-line
   }, [list.length]);
-
-  useEffect(() => {
-    if(!bScroll) return;
-    bScroll.on('touchEnd', (scroll) => {
-      console.log(list[bScroll.getSelectedIndex()]);
-      alert(list[bScroll.getSelectedIndex()].name);
-      // const index = Math.floor(Math.abs(scroll.y) / 42);
-      // bScroll.wheelTo(index)
-    })
-    return () => {
-      bScroll.off('scroll');
-    }
-  }, [bScroll, list]);
-
-
   return (
     <SelectContainer>
-      <input onClick={() => setIsShowSelect(!isShowSelect)} />
+      <input onClick={() => setIsShowSelect(!isShowSelect)} value={selected.name} onChange={() => onChange(selected)} />
       { isShowSelect ?
           <Mask onClick={() => {
             if(maskClose) {
-              setIsShowSelect(!isShowSelect)
+              setIsShowSelect(false)
             }
           }} ></Mask>
         : null }
           <div className={`scroll ${isShowSelect ? "scroll-up" : "scroll-down"}`}>
             <SelectContent>
               <div className="head">
-                <span className="cancel" onClick={() => setIsShowSelect(!isShowSelect)}>{cancelText}</span>
-                <span className="confirm">{confirmText}</span>
+                <span className="cancel" onClick={() => setIsShowSelect(false)}>{cancelText}</span>
+                <span className="confirm" onClick={() => {
+                  setSelected(list[bScroll.getSelectedIndex()]);
+                  onChange(list[bScroll.getSelectedIndex()]);
+                  setIsShowSelect(false);
+                }}>{confirmText}</span>
               </div>
               <div className="list">
                 <div className="wrapper" ref={scrollContainerRef}>
@@ -95,11 +80,13 @@ Select.defaultProps = {
   confirmText: '确定',
   cancelText: '取消',
   maskClose: true,
+  onChange: () => {},
 };
 
 Select.propTypes = {
   confirmText: PropTypes.string,
   cancelText: PropTypes.string,
   maskClose: PropTypes.bool,
+  onChange: PropTypes.func,
 }
 export default React.memo(Select);

@@ -12,3 +12,24 @@ export const SingersContainer = styled.div`
     }
   }
 `
+
+export const SingersList = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 10px;
+  li {
+    // height: 120px;
+    width: 32%;
+    // margin-bottom:
+    img {
+      width: 100%;
+      height: 120px;
+      border-radius: 3px;
+    }
+    p {
+      height: 30px;
+
+    }
+  }
+`

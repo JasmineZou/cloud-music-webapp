@@ -31,8 +31,10 @@ export const getCategoryList = () => {
 export const getSingersList = (categoryId, initial) => {
   return (dispatch) => {
     getSingersListRequest(categoryId, initial).then(data => {
-      dispatch(changeSingersList(data.result));
-      dispatch(changeEnterLoading(false));//改变loading
+      if (data.code === 200) {
+        dispatch(changeSingersList(data.artists));
+        dispatch(changeEnterLoading(false));//改变loading
+      }
     }).catch(() => {
       console.log("歌手数据传输错误");
     });

@@ -7,6 +7,7 @@ export const SelectContainer = styled.div`
     line-height: 24px;
     border: 1px solid #E4EAF1;
     border-radius: 2px;
+    padding: 0 10px;
   }
   .scroll {
     width: 100%;
